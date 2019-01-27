@@ -4,27 +4,88 @@
       <link rel="stylesheet" href='../static/style.css'/>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
    </head>
-   <body>
+   <body onclick = "toggleMode();">
          <div class="logo"></div>
          <div class = "stream">Distance:
          <div id = "big" >{{ distanceData }}</div>
             centimeters </div>
+         <!--
+         <audio>
+            <source src = "https:www.soundjay.com/button/beep-04.wav"  id="highPitch">
+            <source src = "https:www.soundjay.com/button/beep-05.wav"  id="lowPitch">
+            <source src = "https:www.soundjay.com/button/beep-06.wav"  id="midPitch">
+         </audio>
+        -->
          <script type="text/javascript">
+         //set up speech to text
          var msg = new SpeechSynthesisUtterance();
-         var voices = window.speechSynthesis.getVoices(10);
-         msg.voice = voices[10];
          msg.voiceURI = 'native';
-         msg.volume = 6;
+         msg.volume = 7;
          msg.rate = 1;
          msg.pitch = 2;
          msg.text = "Distance is " + {{ distanceData|string() }} + "centimeters";
-         msg.lang = "en-US";
+         msg.lang = "en-US";         
          
-         msg.onend = function(e) {
-            console.log("It works!");
-         };
+         //var sound = document.createElement('audio');
          
-         speechSynthesis.speak(msg);
+         
+         //0 = buzzer input
+         //1 = human voice
+         var noiseMode = sessionStorage.getItem("noise");
+         console.log(noiseMode);
+         /*if(noiseMode !== 0 || noiseMode!== 1){
+            noiseMode = 1;
+         }*/
+         
+         if(noiseMode == 0){
+            if({{distanceData}} > 20 && {{distanceData}} <70){
+               playHighPitch();
+            } else if({{distanceData}} > 70 && {{distanceData}}<150){
+               playMidPitch();
+            } else if({{distanceData}} > 150 && {{distanceData}}<300){
+               playLowPitch();
+            }
+         }
+         
+         else if(noiseMode == 1){
+            speechSynthesis.speak(msg);
+         }       
+         
+         else {            
+             speechSynthesis.speak(msg);
+             noiseMode = 1;
+         }           
+         
+         //define functions to play buzz
+         function playLowPitch(){
+            var sound = new Audio('https://www.soundjay.com/button/beep-05.mp3');
+            sound.volume = 0.5
+            sound.play();
+         }
+         
+         function playMidPitch(){
+            var sound = new Audio('https://www.soundjay.com/button/beep-06.mp3');
+            sound.volume = 0.5
+
+            sound.play();
+         }
+         
+         function playHighPitch(){
+            var sound = new Audio('https://www.soundjay.com/button/beep-04.mp3');
+            sound.volume = 0.5
+            sound.play();
+         }   
+         
+         //switch toggleMode to opposite of current setting
+         function toggleMode(){
+            if(noiseMode == 0){
+               noiseMode = 1;
+               sessionStorage.setItem("noise", 1);
+            } else{
+               noiseMode = 0;
+               sessionStorage.setItem("noise", 0);
+            }
+         }  
          
          setTimeout(function(){
             window.location.reload(1);
