@@ -1,0 +1,28 @@
+body {
+    background-color: black;
+}
+h1 {
+color: blue;
+text-align:center
+}
+p {
+color: red;
+}
+
+.logo {
+    background-image: url('profile.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 80%;
+    padding: 15% 0;
+   }
+
+.stream {
+    margin: auto;
+    background-color: white;
+    text-align: center;
+    width: 50%;
+    border-radius: 25px;
+    padding: 1%
+    overflow: scroll;
+}
