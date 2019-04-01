@@ -13,6 +13,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with BreezyArduCAM.  If not, see <http://www.gnu.org/licenses/>.
 */
+#include <SoftwareSerial.h>
+SoftwareSerial EEBlue(9, 10); // RX | TX
 
 #include <Wire.h>
 #include <BreezyArduCAM.h>
@@ -48,6 +50,8 @@ void loop(void)
       oldSwitchState = switchState;
       if (switchState == HIGH)
       {
+//        if (EEBlue.available()) should be unnecessary
+//          Serial.write(EEBlue.read());
         myCam.capture();   
       }
     }
